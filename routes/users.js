@@ -36,7 +36,7 @@ router.get('/login', (req, res) => {
 
 // LOGIN POST API
 // PASSPORT provides a middlware for auth, and logs in the user
-router.post('/login', storeReturnTo ,passport.authenticate('local', {failureFlash: true, failureRedirect: '/login'}), (req, res) => {
+router.post('/login', storeReturnTo, passport.authenticate('local', {failureFlash: true, failureRedirect: '/login'}), (req, res) => {
     req.flash('success', `Welcome Back, ${req.body.username}!`);
     const redirectUrl = res.locals.returnTo || '/campgrounds';
     res.redirect(redirectUrl);

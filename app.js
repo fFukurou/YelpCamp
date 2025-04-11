@@ -58,7 +58,7 @@ app.use(flash());
  passport.serializeUser(User.serializeUser());
  passport.deserializeUser(User.deserializeUser());
 
-// FLASHES
+// FLASHES AND CURRENTUSER
 app.use((req, res, next) => {
     res.locals.currentUser = req.user;
     res.locals.success = req.flash('success');
