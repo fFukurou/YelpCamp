@@ -51,7 +51,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.urlencoded({extended: true}));
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
-// app.use(mongoSanitize( ));
+// app.use(mongoSanitize());
 
 const secret = process.env.SECRET || 'thisshouldbeabettersecret!';
 
@@ -180,7 +180,8 @@ app.use((err, req, res, next) => {
     res.status(statusCode).render('error.ejs', { err: err });
 })
 
+const port = process.env.PORT || 3000;
 
-app.listen(3000, () => {
-    console.log(`----- App Listening on Port 3000 -----`);
+app.listen(port, () => {
+    console.log(`----- App Listening on Port ${port} -----`);
 });
