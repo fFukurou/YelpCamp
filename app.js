@@ -3,7 +3,6 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 
-
 const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
@@ -26,9 +25,16 @@ const userRoutes = require('./routes/users');
 const campgroundRoutes = require('./routes/campgrounds.js');
 const reviewRoutes = require('./routes/reviews.js');
 
+const MongoDBStore = require('connect-mongo')(session);
 
+const dbUrl = 'mongodb://127.0.0.1:27017/yelp-camp';
+// 'mongodb://127.0.0.1:27017/yelp-camp';
+// process.env.DB_URL;
+
+
+// 'mongodb://127.0.0.1:27017/yelp-camp'
 // MONGOOSE CONNECTION 
-mongoose.connect('mongodb://127.0.0.1:27017/yelp-camp');
+mongoose.connect(dbUrl);
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
 db.once("open", () => {
@@ -47,9 +53,19 @@ app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
 // app.use(mongoSanitize( ));
 
+const store = new MongoDBStore({
+    url: dbUrl,
+    secret: 'thisshouldbeabettersecret',
+    touchAfter: 24 * 60 * 60
+});
+
+store.on("error", function(e) {
+    console.log(`SESSION STORE ERROR`, e);
+})
 
 // SESSION AND FLASH
 const sessionConfig = {
+    store: store,
     name: 'session',
     secret: 'thisshouldbeabettersecret!',
     resave: false,
